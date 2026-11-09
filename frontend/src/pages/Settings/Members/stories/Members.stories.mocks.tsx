@@ -264,7 +264,7 @@ export const sendInvites = async (
 ): Promise<void> => {
 	await openInviteForm(canvasElement);
 	const fields = await screen.findAllByTestId(
-		/^invite-email-/,
+		/^invite-email-.+-field$/,
 		undefined,
 		untilLoaded,
 	);
