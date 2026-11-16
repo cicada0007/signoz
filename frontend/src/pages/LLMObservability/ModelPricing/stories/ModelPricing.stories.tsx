@@ -69,7 +69,7 @@ export const UnpricedModels: Story = {
 	},
 };
 
-/** Creating a rule: the provider select starts empty and enabled. */
+/** Creating a rule: the provider select starts on OpenAI and enabled. */
 export const ModelCostDrawerCreate: Story = {
 	play: async ({ canvasElement }): Promise<void> => {
 		await userEvent.click(
@@ -79,7 +79,10 @@ export const ModelCostDrawerCreate: Story = {
 				{ timeout: 15000 },
 			),
 		);
-		await screen.findByText('Select a provider');
+		const provider = await screen.findByTestId('drawer-provider-select');
+
+		await expect(provider).toHaveTextContent('OpenAI');
+		await expect(provider).not.toHaveAttribute('aria-disabled', 'true');
 	},
 };
 

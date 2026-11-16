@@ -333,7 +333,7 @@ export const AddSpanToFunnelCreateStep: Story = {
 		await userEvent.click(
 			await screen.findByRole('button', { name: /create new funnel/i }),
 		);
-		await screen.findByRole('textbox');
+		await screen.findByTestId('create-funnel-name-input-field');
 	},
 };
 

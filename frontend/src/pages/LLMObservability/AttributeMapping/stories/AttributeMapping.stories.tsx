@@ -70,11 +70,22 @@ export const GroupActionsMenu: Story = {
 	},
 };
 
-/** The drawer that adds a mapping to the first group. */
+/** The drawer that adds a mapping to the first group, opened from its expanded row. */
 export const AddMappingDrawer: Story = {
-	play: async ({ canvasElement }): Promise<void> => {
+	play: async ({ canvasElement, args }): Promise<void> => {
+		if (args.groups === 0) {
+			return;
+		}
+
+		const canvas = within(canvasElement);
+
 		await userEvent.click(
-			await within(canvasElement).findByRole(
+			await canvas.findByTestId('group-expand-group-1', undefined, {
+				timeout: 15000,
+			}),
+		);
+		await userEvent.click(
+			await canvas.findByRole(
 				'button',
 				{ name: /add mapping/i },
 				{ timeout: 15000 },

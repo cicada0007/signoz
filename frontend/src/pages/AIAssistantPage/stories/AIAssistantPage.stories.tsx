@@ -16,7 +16,10 @@ import {
 	speak,
 	startVoiceInput,
 } from './AIAssistantPage.stories.mocks';
-import type { ThreadPart } from './__story_mockdata__/aiAssistant';
+import {
+	THREAD_TITLE,
+	type ThreadPart,
+} from './__story_mockdata__/aiAssistant';
 
 type AIAssistantArgs = PageStoryArgs<typeof aiAssistantMocks>;
 
@@ -274,7 +277,7 @@ export const ConversationRename: Story = {
 			return actions;
 		}, /^Rename$/);
 		await userEvent.click(screen.getByText('Rename'));
-		await within(canvasElement).findByRole('textbox');
+		await within(canvasElement).findByDisplayValue(THREAD_TITLE);
 	},
 };
 
