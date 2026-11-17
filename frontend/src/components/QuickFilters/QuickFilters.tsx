@@ -193,6 +193,7 @@ export default function QuickFilters(props: IQuickFiltersProps): JSX.Element {
 						placeholder="Select a query"
 						value={queryOptions.find((f) => f.value === validQueryIndex)?.label || ''}
 						className="select-box"
+						testId="quick-filters-query-select"
 					/>
 					{open && (
 						<ComboboxContent>
@@ -207,6 +208,7 @@ export default function QuickFilters(props: IQuickFiltersProps): JSX.Element {
 												setOpen(false);
 											}}
 											isSelected={validQueryIndex === option.value}
+											testId={`quick-filters-query-option-${option.value}`}
 										>
 											{option.label}
 										</ComboboxItem>
@@ -300,6 +302,7 @@ export default function QuickFilters(props: IQuickFiltersProps): JSX.Element {
 						color="primary"
 						textPlacement="right"
 						value={showIP ?? true}
+						testId="quick-filters-show-ip"
 						onChange={(checked): void => {
 							logEvent('API Monitoring: Show IP addresses clicked', {
 								showIP: checked,
