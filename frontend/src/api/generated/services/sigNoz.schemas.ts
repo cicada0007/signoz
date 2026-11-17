@@ -13161,7 +13161,7 @@ export interface RuletypesNotificationSettingsDTO {
 export type RuletypesPostableRuleDTOAnnotations = { [key: string]: string };
 
 /**
- * Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. severity is the conventional routing label.
+ * Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. A label named after one the engine writes, such as severity or threshold.name, is ignored.
  */
 export type RuletypesPostableRuleDTOLabels = { [key: string]: string };
 
@@ -13278,7 +13278,7 @@ export interface RuletypesPostableRuleDTO {
 	evaluation: RuletypesEvaluationEnvelopeDTO;
 	/**
 	 * @type object
-	 * @description Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. severity is the conventional routing label.
+	 * @description Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. A label named after one the engine writes, such as severity or threshold.name, is ignored.
 	 */
 	labels?: RuletypesPostableRuleDTOLabels;
 	/**
@@ -13311,7 +13311,7 @@ export interface RuletypesPostableRuleViewDTO {
 export type RuletypesRuleDTOAnnotations = { [key: string]: string };
 
 /**
- * Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. severity is the conventional routing label.
+ * Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. A label named after one the engine writes, such as severity or threshold.name, is ignored.
  */
 export type RuletypesRuleDTOLabels = { [key: string]: string };
 
@@ -13370,7 +13370,7 @@ export interface RuletypesRuleDTO {
 	id: string;
 	/**
 	 * @type object
-	 * @description Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. severity is the conventional routing label.
+	 * @description Labels attached to every alert the rule fires. Keys match [a-zA-Z_.][a-zA-Z0-9_.]*; values may use Go templates such as {{$labels.service_name}}. A label named after one the engine writes, such as severity or threshold.name, is ignored.
 	 */
 	labels?: RuletypesRuleDTOLabels;
 	/**
