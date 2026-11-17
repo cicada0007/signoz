@@ -2,12 +2,25 @@ import type { ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import ROUTES from 'constants/routes';
 import { renderAtRoute } from '@/storybook/renderAtRoute';
-import { screen, userEvent, within } from 'storybook/test';
 
 import { storyMocks } from '@/storybook/controls/defineStoryMocks';
 import type { PageStoryArgs } from '@/storybook/runtime/resolveStory';
 
-import { dashboardMocks, openSettings } from '../DashboardPage.stories.mocks';
+import {
+	copyPublicUrl,
+	editNameAndDescription,
+	openIconPicker,
+	openOverview,
+	openPublish,
+	openPublishPrivate,
+	openPublishTimeRange,
+	publishDashboard,
+	saveRenamedDashboard,
+	syncTooltips,
+	unpublishDashboard,
+	updatePublicDashboard,
+} from '../__story_mockdata__/settings.play';
+import { dashboardMocks } from '../DashboardPage.stories.mocks';
 
 import DashboardPage from '../../DashboardPage';
 
@@ -37,33 +50,17 @@ type Story = StoryObj<DashboardArgs>;
 
 /** The drawer as Configure opens it, on the Overview tab. */
 export const Overview: Story = {
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement);
-		await screen.findByText('Sync Mode');
-	},
+	play: openOverview,
 };
 
 /** Two fields edited, so the footer counts them and offers to save or discard. */
 export const OverviewUnsavedChanges: Story = {
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement);
-		await userEvent.type(await screen.findByTestId('dashboard-name'), ' (v2)');
-		await userEvent.type(
-			screen.getByTestId('dashboard-desc'),
-			' Owned by the platform team.',
-		);
-		await screen.findByText('2 unsaved changes');
-	},
+	play: editNameAndDescription,
 };
 
 /** The icon picker beside the name, open on the system icons. */
 export const OverviewIconPicker: Story = {
-	play: async ({ canvasElement }) => {
-		const panel = await openSettings(canvasElement);
-
-		await userEvent.click(within(panel).getAllByRole('combobox')[0]);
-		await screen.findByRole('listbox');
-	},
+	play: openIconPicker,
 };
 
 /**
@@ -71,11 +68,7 @@ export const OverviewIconPicker: Story = {
  * ones that share the group-by.
  */
 export const OverviewTooltipSync: Story = {
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement);
-		await userEvent.click(await screen.findByRole('radio', { name: 'Tooltip' }));
-		await screen.findByText('Synced Tooltip Series');
-	},
+	play: syncTooltips,
 };
 
 /**
@@ -84,26 +77,17 @@ export const OverviewTooltipSync: Story = {
  */
 export const TooltipsInOverview: Story = {
 	args: { tooltipsOpen: true },
-	play: Overview.play,
+	play: openOverview,
 };
 
 /** The Publish tab of a dashboard with a public link. */
 export const Publish: Story = {
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement, 'Publish');
-		await screen.findByText('Default time range');
-	},
+	play: openPublish,
 };
 
 /** The Publish tab with its default time range select open. */
 export const PublishTimeRangeOpen: Story = {
-	play: async (context) => {
-		await Publish.play?.(context);
-		await userEvent.click(
-			within(screen.getByRole('tabpanel')).getByRole('combobox'),
-		);
-		await screen.findByRole('listbox');
-	},
+	play: openPublishTimeRange,
 };
 
 /** The Publish tab of a dashboard nobody published: no link, one Publish button. */
@@ -111,22 +95,12 @@ export const PublishPrivate: Story = {
 	args: { published: false },
 	// The 404 an unpublished dashboard answers with is the state under test.
 	parameters: { allowConsoleErrors: true },
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement, 'Publish');
-		await screen.findByText('This dashboard is private');
-	},
+	play: openPublishPrivate,
 };
 
 /** The name edited and saved: the toast announcing the update, raised once the patch answers. */
 export const OverviewSavedToast: Story = {
-	play: async ({ canvasElement, args }) => {
-		await openSettings(canvasElement);
-		await userEvent.type(await screen.findByTestId('dashboard-name'), ' (v2)');
-		await userEvent.click(await screen.findByTestId('save-dashboard-config'));
-		if (args.dashboardPatch === 'success') {
-			await screen.findByText('Dashboard updated');
-		}
-	},
+	play: saveRenamedDashboard,
 };
 
 /** Publish Dashboard on a private dashboard: the toast announcing the new link. */
@@ -134,46 +108,20 @@ export const PublishedToast: Story = {
 	args: { published: false },
 	// The 404 an unpublished dashboard answers with is the state under test.
 	parameters: { allowConsoleErrors: true },
-	play: async ({ canvasElement, args }) => {
-		await openSettings(canvasElement, 'Publish');
-		await userEvent.click(await screen.findByTestId('public-dashboard-publish'));
-		if (args.publicWrite === 'success') {
-			await screen.findByText('Dashboard published successfully');
-		}
-	},
+	play: publishDashboard,
 };
 
 /** Update Dashboard on a published dashboard: the toast confirming the new settings. */
 export const PublicUpdatedToast: Story = {
-	play: async ({ canvasElement, args }) => {
-		await openSettings(canvasElement, 'Publish');
-		await userEvent.click(await screen.findByTestId('public-dashboard-update'));
-		if (args.publicWrite === 'success') {
-			await screen.findByText('Public dashboard updated successfully');
-		}
-	},
+	play: updatePublicDashboard,
 };
 
 /** Unpublish Dashboard: the toast confirming the link is gone. */
 export const UnpublishedToast: Story = {
-	play: async ({ canvasElement, args }) => {
-		await openSettings(canvasElement, 'Publish');
-		await userEvent.click(
-			await screen.findByTestId('public-dashboard-unpublish'),
-		);
-		if (args.publicWrite === 'success') {
-			await screen.findByText('Dashboard unpublished successfully');
-		}
-	},
+	play: unpublishDashboard,
 };
 
 /** The copy button beside the public link: the toast confirming the copy. */
 export const PublicUrlCopiedToast: Story = {
-	play: async ({ canvasElement }) => {
-		await openSettings(canvasElement, 'Publish');
-		await userEvent.click(
-			await screen.findByRole('button', { name: 'Copy link' }),
-		);
-		await screen.findByText('Copied public dashboard URL successfully');
-	},
+	play: copyPublicUrl,
 };
